@@ -15,8 +15,7 @@ const getUserWithEmail = function(email) {
       WHERE email = $1`,
       [email]
     )
-    .then(dbRes => dbRes.rows[0] || null)
-    .catch(dbErr => console.log(dbErr.message));
+    .then(dbRes => dbRes[0] || null);
 }
 exports.getUserWithEmail = getUserWithEmail;
 
@@ -33,12 +32,12 @@ const getUserWithId = function(id) {
       WHERE id = $1`,
       [id]
     )
-    .then(dbRes => dbRes.rows[0] || null)
-    .catch(dbErr => console.log(dbErr.message));
+    .then(dbRes => dbRes[0] || null);
 }
 exports.getUserWithId = getUserWithId;
 
 
+    // .catch(dbErr => console.log(dbErr.message));
 /**
  * Add a new user to the database.
  * @param {{name: string, password: string, email: string}} user
@@ -53,8 +52,7 @@ const addUser =  function(user) {
       RETURNING *;`,
       [user.name, user.email, user.password]
     )
-    .then(dbRes => dbRes.rows[0] || null)
-    .catch(dbErr => console.log(dbErr.message));
+    .then(dbRes => dbRes[0]);
 }
 exports.addUser = addUser;
 
@@ -73,9 +71,7 @@ const getAllReservations = function(guest_id, limit = 10) {
       WHERE guest_id = $1
       LIMIT $2;`,
       [guest_id, limit]
-    )
-    .then(dbRes => dbRes.rows || null)
-    .catch(dbErr => console.log(dbErr.message));
+    );
 }
 exports.getAllReservations = getAllReservations;
 
@@ -131,13 +127,9 @@ const getAllProperties = (options, limit = 10) => {
   ORDER BY cost_per_night
   LIMIT $${queryParams.length};
   `;
-
-  console.log(queryString, queryParams);
   
   return db
-    .query(queryString, queryParams)
-    .then(dbRes => dbRes.rows || null)
-    .catch(dbErr => console.log(dbErr.message));
+    .query(queryString, queryParams);
 };
 exports.getAllProperties = getAllProperties;
 
@@ -171,7 +163,6 @@ const addProperty = function(property) {
         property.number_of_bedrooms
       ]
     )
-    .then(dbRes => dbRes.rows[0] || null)
-    .catch(dbErr => console.log(dbErr.message));
+    .then(dbRes => dbRes[0]);
 }
 exports.addProperty = addProperty;
